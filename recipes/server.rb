@@ -75,6 +75,15 @@ template "#{node['postgresql']['dir']}/pg_hba.conf" do
   notifies change_notify, 'service[postgresql]', :immediately
 end
 
+template "#{node['postgresql']['dir']}/local.conf" do
+  source "local.conf.erb"
+  owner "postgres"
+  group "postgres"
+  mode 00600
+  action :create_if_missing
+  notifies change_notify, 'service[postgresql]', :immediately
+end
+
 # NOTE: Consider two facts before modifying "assign-postgres-password":
 # (1) Passing the "ALTER ROLE ..." through the psql command only works
 #     if passwordless authorization was configured for local connections.

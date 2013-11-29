@@ -27,6 +27,15 @@ node['postgresql']['server']['packages'].each do |pg_pack|
 
 end
 
+template "#{node['postgresql']['dir']}/local.conf" do
+  source "local.conf.erb"
+  owner "postgres"
+  group "postgres"
+  mode 00600
+  action :create_if_missing
+end
+
+
 service "postgresql" do
   service_name node['postgresql']['server']['service_name']
   supports :restart => true, :status => true, :reload => true
